@@ -18,7 +18,7 @@ app.get('/', async (req, res) => {
     await page.click('#l_p-1-1');
     await page.waitForSelector('#c-7');
     await page.select('#c-7', 'DLR');
-    await page.waitFor(3000);
+    await page.waitForSelector('#c-a');
     await page.click('#c-a');
     await page.waitFor(3000);
     await page.screenshot({ path: 'whereAmI.png' });
