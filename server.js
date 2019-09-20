@@ -21,15 +21,24 @@ app.get('/', async (req, res) => {
     await page.waitFor(3000);
     await page.click('#c-a');
     await page.waitFor(3000);
-    await page.screenshot({ path: 'example.png' });
+    await page.screenshot({ path: 'whereAmI.png' });
 
     // Build Array
     const table = await page.evaluate(() => {
-      const tds = Array.from(document.querySelectorAll('tbody tr td div span'));
+      const tds = Array.from(document.querySelectorAll('.DTC span'));
       return tds.map(td => td.innerHTML);
     });
+
     console.log(table);
+
     await browser.close();
+    for (let i = 0; i < table.length; i += 7) {
+      writeStream.write(
+        `${table[i]},${table[i + 1]},${table[i + 2]},${table[i + 3]},${
+          table[i + 4]
+        },${table[i + 5]},${table[i + 7]}\n`
+      );
+    }
     res.send('done');
   } catch (err) {
     res.json({ err });
