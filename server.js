@@ -6,7 +6,7 @@ const writeStream = fs.createWriteStream('post.csv');
 require('dotenv').config();
 
 // Write Headers
-writeStream.write(`Title\n`);
+writeStream.write(`Status,ID,Name,Business Type,City,Phone,Expiration\n`);
 
 app.get('/', async (req, res) => {
   try {
@@ -22,6 +22,13 @@ app.get('/', async (req, res) => {
     await page.click('#c-a');
     await page.waitFor(3000);
     await page.screenshot({ path: 'example.png' });
+
+    // Build Array
+    const table = await page.evaluate(() => {
+      const tds = Array.from(document.querySelectorAll('tbody tr td div span'));
+      return tds.map(td => td.innerHTML);
+    });
+    console.log(table);
     await browser.close();
     res.send('done');
   } catch (err) {
