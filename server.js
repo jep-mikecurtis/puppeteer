@@ -29,8 +29,6 @@ app.get('/', async (req, res) => {
       return tds.map(td => td.innerHTML);
     });
 
-    console.log(table);
-
     await browser.close();
     for (let i = 0; i < table.length; i += 7) {
       writeStream.write(
@@ -39,7 +37,8 @@ app.get('/', async (req, res) => {
         },${table[i + 5]},${table[i + 7]}\n`
       );
     }
-    res.send('done');
+
+    res.json({ success: true });
   } catch (err) {
     res.json({ err });
   }
